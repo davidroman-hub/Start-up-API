@@ -16,8 +16,8 @@ const authRoutes = require('./routes/auth')
 //App middelwares
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-app.use(cors());
-
+//app.use(cors());
+app.use(cors({origin:process.env.CLIENT_URL}))
 
 // middleware
 
