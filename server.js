@@ -9,6 +9,22 @@ require('dotenv').config();
 
 const app = express()
 
+//connect mongo db
+mongoose
+    .connect(process.env.DATABASE, {
+        useNewUrlParser: true,
+        useFindAndModify: false,
+        useUnifiedTopology: true,
+        useCreateIndex: true
+    })
+    .then(() => console.log('DB connected'))
+    .catch(err => console.log('DB CONNECTION ERROR: ', err));
+
+    // mongoose
+    // .connect(process.env.DATABASE)
+    // .then(() => console.log('DB connected'))
+    // .catch(err => console.log('DB CONNECTION ERROR: ', err));
+
 // IMPORT ROUTES
 
 const authRoutes = require('./routes/auth')
