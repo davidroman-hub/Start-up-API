@@ -35,13 +35,13 @@ exports.register = (req, res) => {
             .then(data => {
                 console.log('email submitted to SES', data);
                 res.json({
-                    message: `Email ha sido enviado a ${email}, Sigue las instrucciones para terminar tu registro`
+                    message: `E-mail ha sido enviado a ${email}, Sigue las instrucciones para terminar tu registro`
                 });
             })
             .catch(error => {
                 console.log('ses email on register', error);
                 res.json({
-                    error: `No pudimos verificar tu e-mail intenta de nuevo.`
+                    message: `No pudimos verificar tu e-mail intenta de nuevo.`
                 });
             });
     });
