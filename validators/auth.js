@@ -13,13 +13,13 @@ exports.userRegisterValidator = [
         .withMessage('La constraseña necesita ser de almenos 6 carateres')
 ];
 
-exports.userSigninValidator = [
+exports.userLoginValidator = [
     check('email')
         .isEmail()
-        .withMessage('Must be a valid email address'),
+        .withMessage('Se necesita un E-mail valido'),
     check('password')
         .isLength({ min: 6 })
-        .withMessage('Password must be at least  6 characters long')
+        .withMessage('La constraseña necesita ser de almenos 6 carateres')
 ];
 
 

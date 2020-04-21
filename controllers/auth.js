@@ -12,6 +12,10 @@ AWS.config.update({
 
 const ses = new AWS.SES({ apiVersion: '2010-12-01' });
 
+
+// register the account
+
+
 exports.register = (req, res) => {
     // console.log('REGISTER CONTROLLER', req.body);
     const { name, email, password } = req.body;
@@ -48,6 +52,8 @@ exports.register = (req, res) => {
     });
 };
 
+
+/// activate the account
 
 exports.registerActivate = (  req, res) => {
     const {token} = req.body;
@@ -87,5 +93,34 @@ exports.registerActivate = (  req, res) => {
             })
         })
 
+    })
+}
+
+
+/// login users methods
+
+exports.login = (req,res) => {
+    const {email, password} = req.body
+   // console.table({email,password})
+    User.findOne({email}).exec ((err, user) => {
+        if (err || !user){
+            return res.status(400).json({
+                error:'Usuario con ese E-mail no existe. profavor registrate'
+            })
+        }
+        // if exist we want to use method authenticate from User.schema
+        if(!user.authenticate(password)){
+            return res.status(400).json({
+                error:'El E-mail y la contraseña no coinciden'
+            })
+        }
+
+        // generate auth token and send to the client
+
+        const token = jwt.sign({_id:user._id}, process.env.JWT_SECRET,{expiresIn:'7d'})
+        const {_id, name, email, role} = user
+        return res.json({
+            token, user:{_id,name, email, role}
+        })
     })
 }
