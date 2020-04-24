@@ -153,8 +153,8 @@ exports.authMiddleware = (req, res, next) => {
 // admin middleware
 
 exports.adminMiddleware = (req, res, next) => {
-    const authUserId = req.user._id
-    User.findOne({_id: adminUserId}).exec((err, user) => {
+    const adminUserId = req.user._id
+    User.findOne({_id:adminUserId}).exec((err, user) => {
         if(err || !user) {
             return res.status(400).json({
                 error:'Usuario no encontrado'

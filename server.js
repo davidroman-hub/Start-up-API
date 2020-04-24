@@ -28,7 +28,7 @@ mongoose
 // IMPORT ROUTES
 
 const authRoutes = require('./routes/auth')
-
+const userRoutes = require('./routes/user')
 //App middelwares
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -38,6 +38,7 @@ app.use(cors({origin:process.env.CLIENT_URL}))
 // middleware
 
 app.use('/api', authRoutes)
+app.use('/api', userRoutes)
 
 
 
