@@ -11,10 +11,10 @@ const {runValidation} = require('../validators/index')
 router.post('/register', userRegisterValidator, runValidation,register )
 router.post('/register/activate', registerActivate )
 router.post('/login', userLoginValidator, runValidation, login )
-router.get('/secret', requireSignin, (req,res) => {
-    res.json({
-        data:'this is secret page for logged user only'
-    })
-})
+// router.get('/secret', requireSignin, (req,res) => {
+//     res.json({
+//         data:'this is secret page for logged user only'
+//     })
+// })
 
 module.exports = router;

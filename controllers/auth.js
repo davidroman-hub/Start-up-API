@@ -131,3 +131,42 @@ exports.login = (req,res) => {
 // this is for protect the routes.. and what we need.
 
 exports.requireSignin = expressJwt({secret: process.env.JWT_SECRET}) // req.user
+
+
+// user middleware
+
+exports.authMiddleware = (req, res, next) => {
+    const authUserId = req.user._id
+    User.findOne({_id: authUserId}).exec((err, user) => {
+        if(err || !user) {
+            return res.status(400).json({
+                error:'Usuario no encontrado'
+            })
+        }
+
+        req.profile = user
+        next()
+    })
+}
+
+
+// admin middleware
+
+exports.adminMiddleware = (req, res, next) => {
+    const authUserId = req.user._id
+    User.findOne({_id: adminUserId}).exec((err, user) => {
+        if(err || !user) {
+            return res.status(400).json({
+                error:'Usuario no encontrado'
+            })
+        }
+        if(user.role !== 'admin'){
+            return res.status(400).json({
+                error:'Recursos de administrador. Accesso restringido.'
+            })
+        }
+        //
+        req.profile = user
+        next()
+    })
+}
