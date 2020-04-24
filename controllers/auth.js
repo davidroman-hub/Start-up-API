@@ -3,6 +3,8 @@ const AWS = require('aws-sdk');
 const jwt = require('jsonwebtoken');
 const { registerEmailParams } = require('../helpers/email');
 const shortId = require('shortid')
+const expressJwt = require('express-jwt')
+
 
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -124,3 +126,8 @@ exports.login = (req,res) => {
         })
     })
 }
+
+/// middlewares jwt-express
+// this is for protect the routes.. and what we need.
+
+exports.requireSignin = expressJwt({secret: process.env.JWT_SECRET}) // req.user
