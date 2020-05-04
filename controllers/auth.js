@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const AWS = require('aws-sdk');
 const jwt = require('jsonwebtoken');
-const { registerEmailParams } = require('../helpers/email');
+const { registerEmailParams , forgotPasswordEmailParams } = require('../helpers/email');
 const shortId = require('shortid')
 const expressJwt = require('express-jwt')
 
@@ -169,4 +169,55 @@ exports.adminMiddleware = (req, res, next) => {
         req.profile = user
         next()
     })
+}
+
+//// reset password methods
+
+
+
+exports.forgotPassword = (req, res) => {
+    const {email} = req.body
+    // check if user exist with that email
+    User.findOne({email}).exec((err, user) => {
+        if (err || !user) {
+            return res.status(400).json({
+                error:'No se encuentra ningun usuario con este E-mail'
+            })
+        }
+
+        // generate token and email to username
+        const token = jwt.sign({name:user.name}, process.env.JWT_RESET_PASSWORD,{expiresIn:'10m'})
+        // how we have the token we nmeed to send the email
+
+        const params = forgotPasswordEmailParams(email, token);
+
+        // populate database > user > resetPasswordlink
+
+        return user.updateOne({resetPasswordLink: token}, (err, success) => {
+            if (err){
+                return res.status(401).json({
+                    error:'Error  al resetear la contraseña, intenta más tarde.'
+                })
+            }
+            const sendEmail = ses.sendEmail(params).promise()
+            sendEmail
+            .then(data => {
+                console.log('SES reseteo de contraseña realizado!', data)
+                return res.json({
+                    message:` E-mail ha sido enviado a ${email}. Haz click en el Link para resetear tu contraseña!`
+                })
+            })
+            .catch(error => {
+                console.log('SES reseteo de contraseña FALLO!', error)
+                return res.json({
+                    message:`No pudimos verificar tu E-mail intenta de nuevo!`
+                })
+            })
+        })
+
+    })
+}
+
+exports.resetPassword = (req, res) => {
+    //
 }

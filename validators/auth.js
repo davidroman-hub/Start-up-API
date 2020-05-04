@@ -30,15 +30,17 @@ exports.forgotPasswordValidator = [
         .not()
         .isEmpty()
         .isEmail()
-        .withMessage('Must be a valid email address')
+        .withMessage('Necesita haber un E-mail valido')
     
 ];
 
 exports.resetPasswordValidator = [
     check('newPassword')
+        .isLength({min: 6})
+        .withMessage('La contraseña necesita tener 6 caracteres'),
+    check('resetPasswordLink')
         .not()
         .isEmpty()
-        .isLength({min: 6})
-        .withMessage('Must be at least 6 characters long')
+        .withMessage('EL token es requerido')
     
 ];
