@@ -49,7 +49,7 @@ exports.forgotPasswordEmailParams = (email, token) => {
             },
             Subject: {
                 Charset: 'UTF-8',
-                Data: 'Completa tu registro'
+                Data: 'Restablece tu contraseña'
             }
         }
     };
