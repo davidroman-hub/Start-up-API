@@ -6,6 +6,7 @@ const slugify = require('slugify')
 const formidable = require('formidable')
 const AWS = require('aws-sdk')
 const uuidv4 = require('uuid/v4')
+const fs = require('fs')
 
 // s3
 
@@ -66,7 +67,7 @@ exports.create = (req,res) => {
         const params = {
             Bucket:'hackrdev',
             Key:`category/${uuidv4()}`,
-            Body:image.path,
+            Body:fs.readFileSync(image.path),
             ACL:'public-read',
             ContentType:`image/jpg`
         };
@@ -83,8 +84,12 @@ exports.create = (req,res) => {
 
             // // save to db
             category.save((err,success) => {
-                if (err) res.status(400).json({error:'Error en guardar categorya en la base de datos'})
-                return res.json(success)
+                if (err)
+                {
+                    console.log(err);
+                    res.status(400).json({error:'Categoria duplicada'})
+                }
+                 return res.json(success)
             })
         })
 
