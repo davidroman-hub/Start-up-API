@@ -33,7 +33,8 @@ const categoryRoutes = require('./routes/category')
 
 //App middelwares
 app.use(morgan('dev'));
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
+app.use(bodyParser.json({limit:'5mb', type:'application/json'}));
 //app.use(cors());
 app.use(cors({origin:process.env.CLIENT_URL}))
 
